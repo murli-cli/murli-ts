@@ -167,8 +167,8 @@ Idiomatic TS (camelCase) with Go-parity semantics. Public modules:
   `emitSchema(schema, writeFn)`, `defaultCapabilities()`, key-ordering helpers to match Go
   output for golden reuse.
 - **`profiles.ts`** — `ProfileStore` (`get/set/delete/setDefault/names`, `save`),
-  `profilePath(tool)` → `${XDG_CONFIG_HOME ?? ~/.config}/<tool>/profiles.json`,
-  `loadProfileStore(tool)`.
+  `profilePath(tool)` → `~/.<tool>/profiles.json` (matches Go `ProfilePath`; **not** `~/.config`,
+  no XDG — verified against `profiles.go`), `loadProfileStore(tool)`.
 - **`conventions.ts`** — `checkConventions(commandNames, flagNames)` advisory (dev only; see §7).
 - **`agentsmd.ts`** — `formatAgentsMd(describeOutput): string`.
 - **`version.ts`** — `SCHEMA_VERSION`, mutable `toolVersion`, `VALID_OUTPUT_FORMATS`,
@@ -248,7 +248,7 @@ adapter behaves identically.
   - Envelope parity: assert `writeSuccess`/`writePlan`/`writeError` JSON byte-matches the
     reused `murli-go/testdata/golden/*.json` fixtures (and the corrected plan/error shapes).
   - Logger: dedup counts, `repeated` semantics, ANSI stripping, progress vs info levels.
-  - Profiles: path resolution (incl. `XDG_CONFIG_HOME`), round-trip save/load, default,
+  - Profiles: path resolution (`~/.<tool>/profiles.json`), round-trip save/load, default,
     `names()` sorted.
   - Schema: `applyFlagAnnotation` merge rules, `safety.read_only = !mutating`, omitempty
     behavior, `--schema` arg-validation bypass.
