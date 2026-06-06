@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  type FlagSchema,
   applyFlagAnnotation,
   capabilitiesToWire,
   commandSchemaToWire,
   defaultCapabilities,
   describeOutputToWire,
-  type FlagSchema,
   safetyFromMetadata,
 } from "./schema.js";
 
@@ -52,9 +52,18 @@ describe("schema", () => {
       "flags",
       "safety",
     ]);
-    expect(wire.arguments).toEqual([{ name: "id", type: "int", required: true, description: "the id" }]);
-    expect(wire.flags).toEqual([{ name: "force", type: "bool", default: false, description: "skip guard" }]);
-    expect(wire.safety).toEqual({ read_only: false, idempotent: false, destructive: true, dry_run_supported: true });
+    expect(wire.arguments).toEqual([
+      { name: "id", type: "int", required: true, description: "the id" },
+    ]);
+    expect(wire.flags).toEqual([
+      { name: "force", type: "bool", default: false, description: "skip guard" },
+    ]);
+    expect(wire.safety).toEqual({
+      read_only: false,
+      idempotent: false,
+      destructive: true,
+      dry_run_supported: true,
+    });
   });
 
   it("defaultCapabilities + capabilitiesToWire shape", () => {
@@ -82,10 +91,21 @@ describe("schema", () => {
       schemaVersion: "1.0",
       capabilities: defaultCapabilities(),
       commands: [
-        { name: "get", summary: "get a thing", idempotent: true, safety: { readOnly: true, idempotent: true } },
+        {
+          name: "get",
+          summary: "get a thing",
+          idempotent: true,
+          safety: { readOnly: true, idempotent: true },
+        },
       ],
     });
-    expect(Object.keys(wire)).toEqual(["name", "summary", "schema_version", "capabilities", "commands"]);
+    expect(Object.keys(wire)).toEqual([
+      "name",
+      "summary",
+      "schema_version",
+      "capabilities",
+      "commands",
+    ]);
     expect((wire.commands as unknown[]).length).toBe(1);
   });
 });

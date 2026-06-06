@@ -7,7 +7,9 @@ describe("resolveMode", () => {
   });
 
   it("piped stdout defaults to agent mode", () => {
-    expect(resolveMode({ agentMode: false, outputFormat: "", stdoutIsTTY: false }).isTTY).toBe(false);
+    expect(resolveMode({ agentMode: false, outputFormat: "", stdoutIsTTY: false }).isTTY).toBe(
+      false,
+    );
   });
 
   it("--agent forces agent mode even on a TTY", () => {
@@ -15,11 +17,17 @@ describe("resolveMode", () => {
   });
 
   it("--output text forces human mode even when piped", () => {
-    expect(resolveMode({ agentMode: false, outputFormat: "text", stdoutIsTTY: false }).isTTY).toBe(true);
+    expect(resolveMode({ agentMode: false, outputFormat: "text", stdoutIsTTY: false }).isTTY).toBe(
+      true,
+    );
   });
 
   it("--output json/ndjson forces agent mode even on a TTY", () => {
-    expect(resolveMode({ agentMode: false, outputFormat: "json", stdoutIsTTY: true }).isTTY).toBe(false);
-    expect(resolveMode({ agentMode: false, outputFormat: "ndjson", stdoutIsTTY: true }).isTTY).toBe(false);
+    expect(resolveMode({ agentMode: false, outputFormat: "json", stdoutIsTTY: true }).isTTY).toBe(
+      false,
+    );
+    expect(resolveMode({ agentMode: false, outputFormat: "ndjson", stdoutIsTTY: true }).isTTY).toBe(
+      false,
+    );
   });
 });

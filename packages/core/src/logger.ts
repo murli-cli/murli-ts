@@ -1,3 +1,4 @@
+// biome-ignore lint/suspicious/noControlCharactersInRegex: matching the ESC (\x1b) control char is required to strip ANSI escape sequences
 const ANSI_RE = /\x1b\[[0-9;]*[a-zA-Z]/g;
 
 /** Remove ANSI CSI escape sequences. */

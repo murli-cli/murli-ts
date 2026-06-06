@@ -1,10 +1,10 @@
-import { AgentError, ExitCode, newToolError, setToolVersion } from "@murli-cli/core";
 import { annotate, newWriter, run } from "@murli-cli/commander";
+import { AgentError, ExitCode, newToolError, setToolVersion } from "@murli-cli/core";
 import { Command, Option } from "commander";
 import {
-  type Task,
   PRIORITIES,
   STATUSES,
+  type Task,
   ensureLabels,
   initStorage,
   loadDb,
@@ -39,7 +39,9 @@ const taskCreate = task
   .command("create <title>")
   .description("create a task")
   .option("-d, --desc <desc>", "description", "")
-  .addOption(new Option("-p, --priority <priority>", "priority").choices([...PRIORITIES]).default("medium"))
+  .addOption(
+    new Option("-p, --priority <priority>", "priority").choices([...PRIORITIES]).default("medium"),
+  )
   .option("-l, --labels <labels>", "comma-separated labels")
   .action((title: string, opts: { desc: string; priority: string; labels?: string }) => {
     const w = newWriter(taskCreate);
@@ -151,7 +153,12 @@ const taskDelete = task
     saveDb(db);
     w.writeSuccess(`Task ${id} deleted successfully.`, { id: Number(id) });
   });
-annotate(taskDelete, { mutating: true, destructive: true, dryRunnable: true, agentDescription: "Delete a task." });
+annotate(taskDelete, {
+  mutating: true,
+  destructive: true,
+  dryRunnable: true,
+  agentDescription: "Delete a task.",
+});
 
 // label group
 const label = program.command("label").description("manage labels");
@@ -168,7 +175,10 @@ const labelList = label
     }));
     w.writeSuccess(renderLabelTable(db), rows);
   });
-annotate(labelList, { idempotent: true, agentDescription: "List labels and how many tasks use them." });
+annotate(labelList, {
+  idempotent: true,
+  agentDescription: "List labels and how many tasks use them.",
+});
 
 const labelCreate = label
   .command("create <name>")
@@ -227,11 +237,16 @@ const reportCmd = program
     const db = loadDb();
     w.writeSuccess(renderReport(db), reportData(db));
   });
-annotate(reportCmd, { idempotent: true, agentDescription: "Summarize task completion and breakdowns." });
+annotate(reportCmd, {
+  idempotent: true,
+  agentDescription: "Summarize task completion and breakdowns.",
+});
 
 run(program, process.argv).catch((err: unknown) => {
   // Last-resort guard; handlers normally call writeError themselves.
   newWriter(program).writeError(
-    err instanceof AgentError ? err : newToolError(err instanceof Error ? err.message : String(err)),
+    err instanceof AgentError
+      ? err
+      : newToolError(err instanceof Error ? err.message : String(err)),
   );
 });

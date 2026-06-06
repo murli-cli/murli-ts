@@ -1,4 +1,10 @@
-import type { ArgumentMetadata, Example, FlagAnnotation, Metadata, ReturnSchema } from "./metadata.js";
+import type {
+  ArgumentMetadata,
+  Example,
+  FlagAnnotation,
+  Metadata,
+  ReturnSchema,
+} from "./metadata.js";
 import { SCHEMA_VERSION, VALID_OUTPUT_FORMATS, getToolVersion } from "./version.js";
 
 export interface SafetyBlock {

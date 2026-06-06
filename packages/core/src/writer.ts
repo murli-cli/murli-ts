@@ -1,4 +1,4 @@
-import { type AgentError, type ExitFn } from "./errors.js";
+import type { AgentError, ExitFn } from "./errors.js";
 import { Logger } from "./logger.js";
 import { type OutputFormat, resolveMode } from "./mode.js";
 import { DEFAULT_PROTOCOL_VERSION, SCHEMA_VERSION, getToolVersion } from "./version.js";

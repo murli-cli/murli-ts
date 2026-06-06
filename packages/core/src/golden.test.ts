@@ -14,7 +14,12 @@ function capture() {
   const out: string[] = [];
   const err: string[] = [];
   const mk = (b: string[]) =>
-    ({ write: (s: string) => (b.push(s), true) }) as unknown as NodeJS.WritableStream;
+    ({
+      write: (s: string) => {
+        b.push(s);
+        return true;
+      },
+    }) as unknown as NodeJS.WritableStream;
   return { out, err, stdout: mk(out), stderr: mk(err) };
 }
 

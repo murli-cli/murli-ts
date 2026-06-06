@@ -1,9 +1,12 @@
 import type { Db, Task } from "./db.js";
 
 function table(headers: string[], rows: string[][]): string {
-  const widths = headers.map((h, i) => Math.max(h.length, ...rows.map((r) => r[i].length), 0));
+  const widths = headers.map((h, i) =>
+    Math.max(h.length, ...rows.map((r) => (r[i] ?? "").length), 0),
+  );
   const sep = `+${widths.map((w) => "-".repeat(w + 2)).join("+")}+`;
-  const line = (cells: string[]) => `| ${cells.map((c, i) => c.padEnd(widths[i])).join(" | ")} |`;
+  const line = (cells: string[]) =>
+    `| ${cells.map((c, i) => c.padEnd(widths[i] ?? 0)).join(" | ")} |`;
   return [sep, line(headers), sep, ...rows.map(line), sep].join("\n");
 }
 
@@ -38,11 +41,11 @@ export function reportData(db: Db): ReportData {
   const byStatus = { todo: 0, doing: 0, done: 0 } as Record<string, number>;
   const byPriority = { low: 0, medium: 0, high: 0 } as Record<string, number>;
   for (const t of db.tasks) {
-    if (t.status in byStatus) byStatus[t.status]++;
-    if (t.priority in byPriority) byPriority[t.priority]++;
+    if (t.status in byStatus) byStatus[t.status] = (byStatus[t.status] ?? 0) + 1;
+    if (t.priority in byPriority) byPriority[t.priority] = (byPriority[t.priority] ?? 0) + 1;
   }
   const total = db.tasks.length;
-  const done = byStatus.done;
+  const done = byStatus.done ?? 0;
   const percent = total === 0 ? 0 : Math.round((done / total) * 100);
   return { total, done, percent, byStatus, byPriority };
 }

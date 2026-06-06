@@ -36,7 +36,9 @@ export function checkConventions(
   for (const name of commandNames) {
     const preferred = NON_CONVENTIONAL_VERBS[name];
     if (preferred) {
-      write(`[murli advisory] command "${name}": prefer "${preferred}" (conventional vocabulary)\n`);
+      write(
+        `[murli advisory] command "${name}": prefer "${preferred}" (conventional vocabulary)\n`,
+      );
       count++;
     }
   }

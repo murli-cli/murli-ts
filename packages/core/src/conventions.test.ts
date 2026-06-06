@@ -6,8 +6,12 @@ describe("checkConventions", () => {
     const lines: string[] = [];
     const count = checkConventions(["fetch", "get"], ["format"], (s) => lines.push(s));
     expect(count).toBe(2);
-    expect(lines[0]).toBe('[murli advisory] command "fetch": prefer "get" (conventional vocabulary)\n');
-    expect(lines[1]).toBe("[murli advisory] flag --format: prefer --output (conventional vocabulary)\n");
+    expect(lines[0]).toBe(
+      '[murli advisory] command "fetch": prefer "get" (conventional vocabulary)\n',
+    );
+    expect(lines[1]).toBe(
+      "[murli advisory] flag --format: prefer --output (conventional vocabulary)\n",
+    );
   });
 
   it("returns 0 for fully conventional names", () => {

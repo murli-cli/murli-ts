@@ -6,7 +6,12 @@ function sink() {
   const out: string[] = [];
   const err: string[] = [];
   const stream = (buf: string[]) =>
-    ({ write: (s: string) => (buf.push(s), true) }) as unknown as NodeJS.WritableStream;
+    ({
+      write: (s: string) => {
+        buf.push(s);
+        return true;
+      },
+    }) as unknown as NodeJS.WritableStream;
   return { out, err, stdout: stream(out), stderr: stream(err) };
 }
 
@@ -22,7 +27,11 @@ describe("Writer", () => {
     const { w, s } = agentWriter();
     w.writeSuccess("Found 1 result", { count: 1, key: "value" });
     const obj = JSON.parse(s.out.join(""));
-    expect(obj).toEqual({ result: { count: 1, key: "value" }, schema_version: "1.0", status: "ok" });
+    expect(obj).toEqual({
+      result: { count: 1, key: "value" },
+      schema_version: "1.0",
+      status: "ok",
+    });
     expect(Object.keys(obj)).toEqual(["result", "schema_version", "status"]);
   });
 
@@ -80,7 +89,9 @@ describe("Writer", () => {
   it("writeProgress in agent mode is raw struct JSON to stderr (no event wrapper)", () => {
     const { w, s } = agentWriter();
     w.writeProgress({ stage: "read", current: 1, total: 3, percent: 33, etaMs: 4200 });
-    expect(s.err.join("")).toBe('{"stage":"read","current":1,"total":3,"percent":33,"eta_ms":4200}\n');
+    expect(s.err.join("")).toBe(
+      '{"stage":"read","current":1,"total":3,"percent":33,"eta_ms":4200}\n',
+    );
   });
 
   it("exposes state flags", () => {
