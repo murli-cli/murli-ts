@@ -1,3 +1,24 @@
 packages:
   - "packages/*"
   - "examples/*"
+
+# --- Supply-chain hardening ---
+# pnpm 11 reads settings from here (only auth/registry come from .npmrc).
+# Defaults already enforced by pnpm 11: minimumReleaseAge=1440 (1-day install
+# cooldown), blockExoticSubdeps=true, strictDepBuilds=true, verifyStoreIntegrity=true.
+
+# Dependency lifecycle (install/postinstall) scripts run ONLY for these packages.
+# Everything else is blocked; with strictDepBuilds (default true) an unreviewed
+# build script fails the install (ERR_PNPM_IGNORED_BUILDS) until reviewed here.
+allowBuilds:
+  "@biomejs/biome": true
+  esbuild: true
+
+# Refuse to install dependencies incompatible with engines.node (>=18).
+engineStrict: true
+
+# Re-verify the content-addressable store against integrity hashes on install.
+verifyStoreIntegrity: true
+
+# New `pnpm add` pins exact versions instead of caret ranges.
+savePrefix: ""
