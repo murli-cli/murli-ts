@@ -11,3 +11,7 @@ export function annotate(command: Command, meta: Metadata): void {
 export function getMetadata(command: Command): Metadata | undefined {
   return store.get(command);
 }
+
+import { setMetadataLookup } from "./introspect.js";
+
+setMetadataLookup(getMetadata);
