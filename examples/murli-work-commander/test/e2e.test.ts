@@ -18,7 +18,10 @@ function makeRun() {
 
 describe("murli-work e2e (agent mode)", () => {
   beforeAll(() => {
-    expect(existsSync(BIN), "build the example first: pnpm --filter murli-work-commander build").toBe(true);
+    expect(
+      existsSync(BIN),
+      "build the example first: pnpm --filter murli-work-commander build",
+    ).toBe(true);
   });
 
   it("init emits an ok envelope and exits 0", () => {
@@ -73,17 +76,13 @@ describe("murli-work e2e (agent mode)", () => {
     expect(JSON.parse(r.stderr).error).toBe("not_found");
   });
 
-  it("invalid enum value is rejected without mutating state", () => {
-    // Spec intends a flag_error envelope here, but commander rejects an invalid
-    // .choices() value on the subcommand by exiting 1 directly (subcommand
-    // _exitCallback is null because exitOverride is set on the program only, and
-    // the shared output config suppresses stderr in agent mode). Assert the
-    // observable contract: the bad value is rejected and creates no task.
+  it("invalid enum value is rejected with a flag_error envelope and no mutation", () => {
     const run = makeRun();
     run("init", "--force");
     const r = run("task", "create", "x", "--priority", "bogus", "--force");
     expect(r.status).toBe(1);
     expect(r.stdout).toBe("");
+    expect(JSON.parse(r.stderr).error).toBe("flag_error");
     expect(JSON.parse(run("task", "list").stdout).result).toHaveLength(5);
   });
 

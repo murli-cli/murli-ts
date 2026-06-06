@@ -1,6 +1,7 @@
 import {
   type ArgumentMetadata,
   type CommandSchema,
+  DEFAULT_PROTOCOL_VERSION,
   type DescribeCommandSchema,
   type DescribeOutput,
   type FlagSchema,
@@ -13,9 +14,6 @@ import {
   safetyFromMetadata,
 } from "@murli-cli/core";
 import type { Command } from "commander";
-
-/** describe/doctor are introspection/dev surfaces; they are not listed as tool commands. */
-const INTERNAL_COMMANDS = new Set(["describe", "doctor"]);
 
 export function* walkCommands(cmd: Command): Generator<Command> {
   yield cmd;
@@ -78,6 +76,12 @@ function getMetadataRef(cmd: Command): Metadata | undefined {
   return metadataLookup(cmd);
 }
 
+// Same indirection for the internal-command predicate (single source in store.ts).
+let internalLookup: (cmd: Command) => boolean = () => false;
+export function setInternalLookup(fn: (cmd: Command) => boolean): void {
+  internalLookup = fn;
+}
+
 export function buildCommandSchema(cmd: Command): CommandSchema {
   return {
     ...commandFields(cmd),
@@ -88,9 +92,7 @@ export function buildCommandSchema(cmd: Command): CommandSchema {
 function buildDescribeCommand(cmd: Command): DescribeCommandSchema {
   return {
     ...commandFields(cmd),
-    subcommands: cmd.commands
-      .filter((c) => !INTERNAL_COMMANDS.has(c.name()))
-      .map(buildDescribeCommand),
+    subcommands: cmd.commands.filter((c) => !internalLookup(c)).map(buildDescribeCommand),
   };
 }
 
@@ -101,11 +103,9 @@ export function buildDescribeTree(program: Command, profiles?: ProfilesInfo): De
     name: program.name(),
     summary: program.description() ?? "",
     schemaVersion: SCHEMA_VERSION,
-    capabilities: { ...defaultCapabilities(), dryRun, protocolVersion: "0.2" },
+    capabilities: { ...defaultCapabilities(), dryRun, protocolVersion: DEFAULT_PROTOCOL_VERSION },
     profiles,
-    commands: program.commands
-      .filter((c) => !INTERNAL_COMMANDS.has(c.name()))
-      .map(buildDescribeCommand),
+    commands: program.commands.filter((c) => !internalLookup(c)).map(buildDescribeCommand),
   };
   if (tv) out.toolVersion = tv;
   return out;
