@@ -1,6 +1,7 @@
 export const SCHEMA_VERSION = "1.0";
 export const VALID_OUTPUT_FORMATS = ["json", "ndjson", "text"] as const;
 export const VALID_PROTOCOL_VERSIONS = ["0.2"] as const;
+export const DEFAULT_PROTOCOL_VERSION = VALID_PROTOCOL_VERSIONS[0];
 
 let toolVersion = "";
 

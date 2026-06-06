@@ -58,12 +58,10 @@ export class ProfileStore {
   save(tool: string): void {
     const path = profilePath(tool);
     mkdirSync(dirname(path), { recursive: true });
-    const data: ProfileStoreData = { profiles: this.profiles };
-    if (this.default) data.default = this.default;
     // Build in Go key order: default (omitempty), profiles.
-    const ordered: Record<string, unknown> = {};
-    if (this.default) ordered.default = this.default;
-    ordered.profiles = this.profiles;
-    writeFileSync(path, `${JSON.stringify(ordered, null, 2)}\n`);
+    const out: ProfileStoreData = {};
+    if (this.default) out.default = this.default;
+    out.profiles = this.profiles;
+    writeFileSync(path, `${JSON.stringify(out, null, 2)}\n`);
   }
 }

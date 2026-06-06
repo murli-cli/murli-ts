@@ -7,8 +7,8 @@ import { Writer } from "./writer.js";
 function goldenDir(): string {
   return fileURLToPath(new URL("../../../testdata/golden/", import.meta.url));
 }
-function golden(name: string): unknown {
-  return JSON.parse(readFileSync(`${goldenDir()}${name}`, "utf8"));
+function goldenText(name: string): string {
+  return readFileSync(`${goldenDir()}${name}`, "utf8");
 }
 function capture() {
   const out: string[] = [];
@@ -23,14 +23,14 @@ describe("golden parity with murli-go", () => {
     const c = capture();
     const w = new Writer({ stdout: c.stdout, stderr: c.stderr, agentMode: true });
     w.writeSuccess("Found 1", { count: 1, key: "value" });
-    expect(JSON.parse(c.out.join(""))).toEqual(golden("success_envelope.json"));
+    expect(c.out.join("")).toBe(goldenText("success_envelope.json"));
   });
 
   it("plan envelope", () => {
     const c = capture();
     const w = new Writer({ stdout: c.stdout, stderr: c.stderr, agentMode: true });
     w.writePlan("plan", { count: 3, files: ["a", "b", "c"] });
-    expect(JSON.parse(c.out.join(""))).toEqual(golden("plan_envelope.json"));
+    expect(c.out.join("")).toBe(goldenText("plan_envelope.json"));
   });
 
   it("error envelope", () => {
@@ -45,6 +45,6 @@ describe("golden parity with murli-go", () => {
         recoverable: true,
       }),
     );
-    expect(JSON.parse(c.err.join(""))).toEqual(golden("error_envelope.json"));
+    expect(c.err.join("")).toBe(goldenText("error_envelope.json"));
   });
 });

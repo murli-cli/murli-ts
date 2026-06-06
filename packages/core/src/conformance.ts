@@ -42,10 +42,12 @@ export function runConformance(opts: ConformanceOptions): ConformanceResult {
   if (!cap) {
     failures.push("describe.capabilities is missing");
   } else {
-    if (!Array.isArray(cap.output_formats)) failures.push("capabilities.output_formats is missing");
+    if (cap.output_formats !== undefined && !Array.isArray(cap.output_formats))
+      failures.push("capabilities.output_formats must be an array");
     if (cap.schema_version !== wantSV) failures.push("capabilities.schema_version mismatch");
   }
-  if (!Array.isArray(doc.commands)) failures.push("describe.commands is missing");
+  if (doc.commands !== undefined && !Array.isArray(doc.commands))
+    failures.push("describe.commands must be an array");
 
   return { passed: failures.length === 0, failures };
 }

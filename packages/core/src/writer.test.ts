@@ -90,4 +90,20 @@ describe("Writer", () => {
     expect(w.isTTY()).toBe(false);
     expect(w.protocolVersion()).toBe("0.2");
   });
+
+  it("emits <, >, & literally (HTML escaping is off)", () => {
+    const { w, s } = agentWriter();
+    w.writeSuccess("h", { tag: "<x> & </x>" });
+    const raw = s.out.join("");
+    expect(raw).toContain("<x> & </x>");
+    expect(raw).not.toContain("\\u003c");
+    expect(raw).not.toContain("\\u0026");
+  });
+
+  it("error envelope has no status field", () => {
+    const { w, s } = agentWriter();
+    w.writeError(newUserError("bad", "fix"));
+    const obj = JSON.parse(s.err.join(""));
+    expect("status" in obj).toBe(false);
+  });
 });

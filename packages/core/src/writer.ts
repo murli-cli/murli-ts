@@ -1,7 +1,7 @@
 import { type AgentError, type ExitFn } from "./errors.js";
 import { Logger } from "./logger.js";
 import { type OutputFormat, resolveMode } from "./mode.js";
-import { SCHEMA_VERSION, getToolVersion } from "./version.js";
+import { DEFAULT_PROTOCOL_VERSION, SCHEMA_VERSION, getToolVersion } from "./version.js";
 
 export interface ProgressEvent {
   stage?: string;
@@ -46,7 +46,7 @@ export class Writer {
     });
     this._isTTY = isTTY;
     this._format = format;
-    this._protocolVersion = init.protocolVersion ?? "";
+    this._protocolVersion = init.protocolVersion || DEFAULT_PROTOCOL_VERSION;
     this._force = init.force ?? false;
     this._dryRun = init.dryRun ?? false;
     this.exitFn = init.exitFn ?? ((code: number) => process.exit(code));
@@ -66,7 +66,7 @@ export class Writer {
     return this._format;
   }
   protocolVersion(): string {
-    return this._protocolVersion === "" ? "0.2" : this._protocolVersion;
+    return this._protocolVersion;
   }
 
   log(msg: string): void {
@@ -88,7 +88,7 @@ export class Writer {
   }
 
   private writeResultEnvelope(status: "ok" | "plan", humanText: string, result: unknown): void {
-    if (this._format === "text" || (this._format === "" && this._isTTY)) {
+    if (this._isTTY) {
       this.stdout.write(`${humanText}\n`);
       return;
     }
