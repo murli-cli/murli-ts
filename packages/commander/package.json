@@ -1,0 +1,21 @@
+{
+  "name": "@murli-cli/commander",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": { "build": "tsup" },
+  "dependencies": { "@murli-cli/core": "workspace:*" },
+  "peerDependencies": { "commander": ">=12 <13" },
+  "devDependencies": { "commander": "^12.1.0" },
+  "license": "MIT"
+}
