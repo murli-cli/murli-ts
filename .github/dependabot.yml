@@ -1,0 +1,20 @@
+version: 2
+updates:
+  # npm/pnpm dependencies — keeps the dependency surface patched with reviewable PRs.
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # Batch low-risk minor/patch bumps into one PR; majors get their own PR.
+      minor-and-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
+  # GitHub Actions — keeps the SHA-pinned actions current (Dependabot bumps the pin + comment).
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
