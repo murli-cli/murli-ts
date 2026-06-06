@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  // @murli-cli/core and @murli-cli/commander are internal workspace packages linked
+  // via `workspace:*`. They ARE imported (commander -> core; example -> both), and the
+  // imports resolve (no unresolved-imports). Fallow's unused-dependency detector does not
+  // attribute workspace-internal resolution back to the package.json `dependencies` entry,
+  // so it reports these as unused. Suppress the known false positive.
+  "ignoreDependencies": ["@murli-cli/core", "@murli-cli/commander"]
+}

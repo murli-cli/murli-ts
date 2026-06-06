@@ -18,7 +18,7 @@ export interface Db {
   tasks: Task[];
   labels: Label[];
 }
-export interface Config {
+interface Config {
   default_output: string;
   default_priority: string;
 }
@@ -26,7 +26,7 @@ export interface Config {
 export const PRIORITIES = ["low", "medium", "high"] as const;
 export const STATUSES = ["todo", "doing", "done"] as const;
 
-export function configDir(): string {
+function configDir(): string {
   const override = process.env.MURLI_WORK_DIR;
   if (override) return override;
   const home = homedir();
@@ -43,7 +43,7 @@ export function configDir(): string {
 const dbPath = (): string => join(configDir(), "db.json");
 const configPath = (): string => join(configDir(), "config.json");
 
-export function defaultConfig(): Config {
+function defaultConfig(): Config {
   return { default_output: "table", default_priority: "medium" };
 }
 
@@ -123,11 +123,6 @@ export function loadDb(): Db {
 export function saveDb(db: Db): void {
   mkdirSync(configDir(), { recursive: true });
   writeFileSync(dbPath(), `${JSON.stringify(db, null, 2)}\n`);
-}
-
-export function loadConfig(): Config {
-  if (!existsSync(configPath())) initStorage();
-  return JSON.parse(readFileSync(configPath(), "utf8")) as Config;
 }
 
 export function slugify(name: string): string {
