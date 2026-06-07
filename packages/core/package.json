@@ -13,7 +13,15 @@
     }
   },
   "files": ["dist"],
-  "publishConfig": { "access": "public", "provenance": true },
-  "scripts": { "build": "tsup" },
-  "license": "MIT"
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.19.20"
+  }
 }

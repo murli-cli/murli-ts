@@ -13,10 +13,22 @@
     }
   },
   "files": ["dist"],
-  "publishConfig": { "access": "public", "provenance": true },
-  "scripts": { "build": "tsup" },
-  "dependencies": { "@murli-cli/core": "workspace:*" },
-  "peerDependencies": { "commander": ">=12 <13" },
-  "devDependencies": { "commander": "^12.1.0" },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "@murli-cli/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "commander": ">=12 <13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.20",
+    "commander": "^12.1.0"
+  },
   "license": "MIT"
 }

@@ -3,11 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "bin": { "murli-work": "./dist/main.js" },
-  "scripts": { "build": "tsup" },
+  "bin": {
+    "murli-work": "./dist/main.js"
+  },
+  "scripts": {
+    "build": "tsup"
+  },
   "dependencies": {
     "@murli-cli/commander": "workspace:*",
     "@murli-cli/core": "workspace:*",
     "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.20"
   }
 }
