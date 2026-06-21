@@ -22,6 +22,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^22.19.20"
+    "@types/node": "^26.0.0"
   }
 }
